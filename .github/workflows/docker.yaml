@@ -19,11 +19,7 @@ jobs:
           docker buildx create --name xbuilder
           docker buildx use xbuilder
           docker buildx inspect --bootstrap
-      - name: Log in to registry
-        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login quay.io -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
       - name: Log in to GHCR registry
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-      - name: Build the Docker image
-        run: docker buildx build . --file Dockerfile --tag quay.io/mect/eID-REST:$GITHUB_SHA --push --platform "linux/amd64,linux/arm64,linux/arm"
       - name: Build the Docker image
         run: docker buildx build . --file Dockerfile --tag ghcr.io/mect/eID-REST:$GITHUB_SHA --push --platform "linux/amd64,linux/arm64,linux/arm"
